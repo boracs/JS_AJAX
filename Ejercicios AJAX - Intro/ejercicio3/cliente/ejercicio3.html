@@ -6,6 +6,33 @@
 
 <script type="text/javascript">
 
+window.onload = inicio;
+
+function inicio(){
+
+	document.getElementById("comprobar").addEventListener("click", comprueba);
+}
+
+
+
+
+function comprueba(){
+	var http = new XMLHttpRequest();
+	http.open("GET", "../servidor/compruebaDisponibilidad.php",true);
+	http.onreadystatechange = llamarajax;
+	http.send(null);
+}
+
+function llamarajax(){
+	if(this.status=200 && this.readyState==4){
+		var respuesta = this.responseText;
+		if(respuesta == "si"){
+			document.getElementById("disponibilidad").innerHTML="El nombre no esta disponible";
+		}else{
+			document.getElementById("disponibilidad").innerHTML="El nombre  esta disponible";
+		}
+	}
+}
 </script>
 </head>
 

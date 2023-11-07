@@ -33,37 +33,48 @@
         cuadrotxt.value = document.location;
 
         var btnmostrar = document.getElementById("enviar");
-        btnmostrar.addEventListener("click",cargaajax);
+        btnmostrar.addEventListener("click",cargaAjax);
       }
 
-      function cargaajax(){
-
+      function cargaAjax(){
         var cuadrotxt = document.getElementById("recurso");
-        cuadrotxt.value = document.location;
-        http = new XMLHttpRequest();
+        cuadrotxt.value = document.location.href;
+        url = cuadrotxt.value;
+        var http = new XMLHttpRequest();
         http.open("GET", cuadrotxt.value , true);
         http.onreadystatechange = cargacontenidos;
-    
         http.send(null);
       }
 
         function cargacontenidos(){
-          var cuadrostatus = document.getElementById("secundario")
-          if(this.status==1){
+
+          var cuadrostatus = document.getElementById("estados");
+       
+
+          if(this.readyState==2){
             var p = document.createElement("p");
-            p.textContent="this.status";
+            p.textContent=this.readyState + " ok";
             cuadrostatus.appendChild(p);
 
-          }
-          if(this.status==2){
-            
-          }
-          if(this.status==3){
-            
-          }
-          if (http.readyState == 4 && http.status==200) {
+          } else if(this.readyState==3){
+            var p = document.createElement("p");
+            p.textContent=this.readyState  + " ok";
+            cuadrostatus.appendChild(p);
 
+          } else if(this.readyState==4){
+            var p = document.createElement("p");
+            p.textContent=this.readyState  + " ok";
+            cuadrostatus.appendChild(p);
+            
+          }
+
+          if (this.readyState == 4 && this.status==200) {
+            var cont1 = document.getElementById("contenidos");
+            contenidos.textContent = this.responseText;
+            var cod = document.getElementById("codigo");
+            cod.textContent= this.status;
         }
+
 
       }
 

@@ -21,6 +21,52 @@ body { margin: 0; }
 }
 </style>
 <script type="text/javascript">
+
+
+window.onload = inicio;
+var intervalo;
+var noticias=[];
+
+function inicio()
+{
+intervalo = setInterval(cargaAjax,1000);
+var btn =document.getElementById("detener");
+btn.addEventListener("click",cambia);
+
+}
+
+function cargaAjax()
+{
+  var http = new XMLHttpRequest();
+  http.open("GET","../servidor/generaContenidos.php",true);
+  http.onreadystatechange=cargaTexto;
+  http.send(null);
+}
+
+function cargaTexto()
+{
+  if(this.status==200 && this.readyState ==4){
+    var respuesta = this.responseText;
+    document.getElementById("ticker").textContent = respuesta;
+    noticias.push({titulat:this.responseText});
+  }
+}
+
+
+// esta funcuion no funciona 
+function cambia()
+{
+  var btn = document.getElementById("detener");
+  if(btn.value=="Detener"){
+    clearInterval(intervalo);
+    btn.value="Play";
+
+  }else{
+    intervalo = setInterval(cargaAjax,1000);
+    btn.value="Detener";
+  }
+}
+
 </script>
 </head>
 <body>
