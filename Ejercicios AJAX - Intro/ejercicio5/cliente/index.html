@@ -35,6 +35,7 @@ function llamarajax(){
 			var ul = document.createElement("ul");
 			if(respuesta.disponible=="no"){
 				for(var i =0; i<respuesta.alternativas.length; i++){
+					console.log(alternativas);
 					var li = document.createElement("li");
 					li.textContent=respuesta.alternativas[i];
 					ul.appendChild(li);

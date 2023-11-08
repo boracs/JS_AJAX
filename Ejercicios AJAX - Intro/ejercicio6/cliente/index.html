@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+<script>
+
+window.onload=inicio;
+function inicio(){
+
+var http= new XMLHttpRequest();
+http.open("GET","../servidor/cargaProvinciasXML.php",true);
+http.onreadystatechange = cargaprovincias;
+http.send(null);
+
+document.getElementById("provincias").addEventListener("change",cargamunicipio);
+
+}
+
+function cargaprovincias(){
+    if(this.status==200  && this.readyState==4){
+            var respuesta = this.responseXML;
+            var provincias = respuesta.getElementsByTagName("provincias")[0];
+            var provincia = provincias.getElementsByTagName("provincia");
+        for(var i =0; i<provincia.length; i++){
+            var codigo = provincia[i].getElementsByTagName("codigo")[0].textContent;
+            var nombre = provincia[i].getElementsByTagName("nombre")[0].textContent;
+            var opt= document.createElement("option");
+            opt.textContent= nombre;
+            opt.value=codigo;
+            document.getElementById("provincias").appendChild(opt);
+        }
+    }
+}
+
+function cargamunicipio(){
+
+    var http = new XMLHttpRequest();
+    var cod = document.getElementById("provincias").value;
+    http.open("POST","../servidor/cargaMunicipiosXML.php");
+    http.onreadystatechange = metemunicipios;
+    http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    http.send("provincia="+cod);
+
+}
+
+
+function metemunicipios(){
+    document.getElementById("municipios").length=0;
+if(this.status==200 && this.readyState ==4){
+    var respuesta = this.responseXML;
+    var municipios = respuesta.getElementsByTagName("municipios")[0];
+    var municipio = municipios.getElementsByTagName("municipio");
+    for(var i =0; i<municipio.length; i++){
+        var opt = document.createElement("option");
+        var nombre = municipio[i].getElementsByTagName("nombre")[0].textContent;
+        opt.textContent = nombre;
+        document.getElementById("municipios").appendChild(opt);
+
+    }
+
+
+
+}
+
+
+}
+
+
+
+
+
+
+</script>
+
+
+
+</head>
+<body>
+    
+<select name="" id="provincias"></select>
+<select name="" id="municipios"></select>
+
+
+
+
+
+</body>
+</html>
