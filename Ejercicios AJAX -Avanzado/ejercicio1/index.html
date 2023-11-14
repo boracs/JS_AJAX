@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        window.onload=inicio;
+        function inicio(){
+
+
+            var http = new XMLHttpRequest();
+            http.open("GET","index.php", true);
+            http.onreadystatechange = cargaLista;
+            http.send(null)
+
+        }
+
+
+        function cargaLista(){
+            if(this.status == 200 && this.readyState ==4){
+                var respuesta = this.responseXML;
+                var peliculas = respuesta.getElementsByTagName("Peliculas")[0];
+                var pelicula = peliculas.getElementsByTagName("Pelicula");
+          
+                var tabla =   document.createElement("table");
+                tabla.style="border:1px solid black";
+
+                for(var i=0; i<pelicula.length; i++){
+                    var td = document.createElement("td");
+                    var trD = document.createElement("tr");
+                    var pD = document.createElement("p");
+                    var director = pelicula[i].getElementsByTagName("Director")[0].firstChild.nodeValue;
+                    pD.textContent=director;
+                    trD.appendChild(pD);
+                    td.appendChild(trD);
+                    
+
+                    var trT = document.createElement("tr");
+                    var pT = document.createElement("p");
+                    var titulo = pelicula[i].getElementsByTagName("Titulo")[0].firstChild.nodeValue;
+                    pT.textContent=titulo;
+                    trT.appendChild(pT);
+                    td.appendChild(trT);
+                    tabla.appendChild(td);
+                }
+            console.log(td);
+
+            var contenedor = document.getElementById("contenedor");
+            document.body.appendChild(tabla);
+            }
+
+        }
+
+
+
+    </script>
+</head>
+<body>
+
+
+<div id ="contenedor">
+
+</div>
+
+
+
+
+
+
+    
+</body>
+</html>

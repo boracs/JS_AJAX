@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script>
+        window.onload = inicio;
+        function inicio() {
+            var http = new XMLHttpRequest();
+            http.open("GET", "index.php", true);
+            http.onreadystatechange = cargaimg;
+            http.send(null);
+
+
+        }
+
+        function cargaimg() {
+
+            if (this.status == 200 && this.readyState == 4) {
+                var respuesta = this.responseXML;
+                var peliculas = respuesta.getElementsByTagName("Peliculas")[0];
+                var pelicula = peliculas.getElementsByTagName("Pelicula");
+                for (var i = 0; i < pelicula.length; i++) {
+                    var imgNombre = pelicula[i].getElementsByTagName("imagen")[0].firstChild.nodeValue;
+                    var sinopsis = pelicula[i].getElementsByTagName("sinopsis")[0].firstChild.nodeValue;
+                    var img = document.createElement("img");
+                    img.alt = sinopsis;
+                    img.src = "imagenes/" + imgNombre;
+                    img.addEventListener("mouseover", pidesinopsis)
+                    document.body.appendChild(img);
+                }
+
+
+
+            }
+        }
+
+
+        function pidesinopsis() {
+
+            var http = new XMLHttpRequest();
+            var nombresinopsis = this.alt;
+            console.log(nombresinopsis);
+            http.open("GET", "sinopsis.php?fichero=" + nombresinopsis, true);
+            http.onreadystatechange = cargasinopsis;
+            http.send(null);
+        }
+
+        function cargasinopsis() {
+            if (this.status == 200 && this.readyState == 4) {
+                var respuesta = this.responseText;
+                var  p = document.createElement("p");
+                p.textContent = respuesta;
+                document.getElementById("sinopsis").removeChild;
+                document.getElementById("sinopsis").appendChild(p);
+
+            }
+
+
+
+
+
+        }
+
+    </script>
+
+
+
+</head>
+
+<body>
+
+
+
+
+
+
+<div id="sinopsis">
+AQUI VA LA SINOPSIS
+</div>
+
+
+
+</body>
+
+</html>
