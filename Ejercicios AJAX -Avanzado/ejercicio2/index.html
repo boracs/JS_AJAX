@@ -8,7 +8,8 @@
 
     <script>
         window.onload = inicio;
-        function inicio() {
+        function inicio() 
+        {
             var http = new XMLHttpRequest();
             http.open("GET", "index.php", true);
             http.onreadystatechange = cargaimg;
@@ -17,7 +18,8 @@
 
         }
 
-        function cargaimg() {
+        function cargaimg() 
+        {
 
             if (this.status == 200 && this.readyState == 4) {
                 var respuesta = this.responseXML;
@@ -39,8 +41,8 @@
         }
 
 
-        function pidesinopsis() {
-
+        function pidesinopsis() 
+        {
             var http = new XMLHttpRequest();
             var nombresinopsis = this.alt;
             console.log(nombresinopsis);
@@ -49,20 +51,15 @@
             http.send(null);
         }
 
-        function cargasinopsis() {
+        function cargasinopsis() 
+        {
             if (this.status == 200 && this.readyState == 4) {
+
                 var respuesta = this.responseText;
-                var  p = document.createElement("p");
-                p.textContent = respuesta;
-                document.getElementById("sinopsis").removeChild;
-                document.getElementById("sinopsis").appendChild(p);
-
+                var  parrrafo = document.getElementById("parrrafo");
+                parrrafo.textContent= respuesta;
+                parrafo.textContent="";
             }
-
-
-
-
-
         }
 
     </script>
@@ -73,13 +70,8 @@
 
 <body>
 
-
-
-
-
-
 <div id="sinopsis">
-AQUI VA LA SINOPSIS
+    <p id="parrrafo"></p>
 </div>
 
 

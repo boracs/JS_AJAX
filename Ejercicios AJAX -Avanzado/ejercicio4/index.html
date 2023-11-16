@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script>
+        window.onload = inicio;
+
+
+
+        function inicio() {
+            document.getElementById("btn").addEventListener("click", cargaAjax);
+     
+        }
+
+
+
+
+        var http;
+        function cargaAjax() {
+            http = new XMLHttpRequest();
+            http.open("GET", "index.php", true);
+            http.onreadystatechange = pidedirectores;
+            http.send(null);
+        }
+
+
+
+
+        var cont = 0;
+        function pidedirectores() {
+
+            if (http.status == 200 && http.readyState == 4) {
+                
+                if (cont == 0) {
+                    var sel1 = document.createElement("select");
+                    sel1.id = "sel1";
+                    sel1.addEventListener("change", cargatitulo);
+                    var opt1 = document.createElement("option");
+                    opt1.textContent = "selecciona una opcion";
+                    sel1.appendChild(opt1);
+                    document.body.appendChild(sel1);
+                    cont++;
+                }
+
+                var respuesta = JSON.parse(http.responseText);
+                var pelicula = respuesta.Pelicula;
+                console.log(pelicula.length);
+                
+                
+                
+                for (var i = 0; i < pelicula.length; i++) {
+
+                    var director = pelicula[i].Director;
+                    sel1 = document.getElementById("sel1");
+                    var repite = false;
+
+                    for (var j = 0; j < sel1.length; j++) {
+
+                        if (director == sel1[j].value) {
+
+                            repite = true;
+                        }
+                    }
+                    if (repite == false) {
+
+                        var opt = document.createElement("option");
+                        opt.textContent = director;
+                        sel1.appendChild(opt);
+                    }
+                }
+            }
+
+        }
+
+        var cont2=0;
+        function cargatitulo() {
+                if(cont2==0){
+                var sel2 = document.createElement("select");
+                sel2.addEventListener("change",cargasinopsis);
+                sel2.id="sel2";
+                var opt2 = document.createElement("option");
+                opt2.textContent="selecciona un titulo";
+                sel2.appendChild(opt2);
+                document.body.appendChild(sel2);
+                cont2++;
+                }
+            document.getElementById("sel2").length=0;
+            var opt2 = document.createElement("option");
+            var sel2 = document.getElementById("sel2");
+            opt2.textContent="selecciona un titulo";
+            sel2.appendChild(opt2);
+            var respuesta = JSON.parse(http.responseText);
+            var peliculas = respuesta.getElementsByTagName("Peliculas")[0];
+            var pelicula  = peliculas.getElementsByTagName("Pelicula");
+            for(var i=0; i<pelicula.length; i++){
+                var titulo = pelicula[i].Titulo;
+                var director = pelicula[i].Director;
+                var sinopsis = pelicula[i].sinopsis;
+                console.log(director);
+                if(director == document.getElementById("sel1").value){
+                   var opt3 = document.createElement("option");
+                   opt3.textContent=titulo;
+                   opt3.value = sinopsis;
+                   document.getElementById("sel2").appendChild(opt3);
+                }
+            }
+        }
+
+        function cargasinopsis(){
+
+            var http= new XMLHttpRequest();
+            var sinops= document.getElementById("sel2").value;
+            http.open("GET","sinopsis.php?fichero="+sinops,true);
+            http.onreadystatechange= muestrasinopsis;
+            http.send(null);
+        }
+
+
+
+      
+        var cont3=0; 
+        function muestrasinopsis(){
+
+        if(cont3 ==0){
+            console.log("hola");
+            var contenedor = document.createElement("div");
+            contenedor.id="contenedor";
+            document.body.appendChild(contenedor);
+            cont3++;
+        }
+            var respuesta = this.responseText; 
+            var contenedor1 =  document.getElementById("contenedor");
+            contenedor1.textContent=respuesta;
+            document.body.appendChild(contenedor1);
+
+        }
+
+
+
+    </script>
+
+
+
+</head>
+
+<body>
+
+    <button id="btn">Carga directores</button>
+
+</body>
+
+</html>
